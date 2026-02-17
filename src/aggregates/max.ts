@@ -1,40 +1,46 @@
-import { errors } from "../constants/errors.js";
+import { errors } from '../constants/errors.js';
 
 export function max(values: number[]) {
-  if (values.length === 0) return 0;
+	if (values.length === 0) return 0;
 
-  return values.reduce((highestValue, currentValue) => Math.max(highestValue, currentValue));
+	return values.reduce((highestValue, currentValue) =>
+		Math.max(highestValue, currentValue),
+	);
 }
 
 export class MaxByNoValuesError extends Error {
-  constructor() {
-    super(errors.maxBy.noValues);
-  }
+	constructor() {
+		super(errors.maxBy.noValues);
+	}
 }
 
-export function maxBy<T>(values: T[], by: (value: T) => number, fallbackComparator?: (value1: T, value2: T) => number) {
-  const valuesCount = values.length;
-  if (valuesCount === 0) throw new MaxByNoValuesError();
+export function maxBy<T>(
+	values: T[],
+	by: (value: T) => number,
+	fallbackComparator?: (value1: T, value2: T) => number,
+) {
+	const valuesCount = values.length;
+	if (valuesCount === 0) throw new MaxByNoValuesError();
 
-  let highest: T = values[0];
+	let highest: T = values[0];
 
-  for (let i = 1; i < valuesCount; i++) {
-    const highestValue = by(highest);
-    const currentValue = by(values[i]);
+	for (let i = 1; i < valuesCount; i++) {
+		const highestValue = by(highest);
+		const currentValue = by(values[i]);
 
-    if (currentValue > highestValue) {
-      highest = values[i];
-      continue;
-    }
+		if (currentValue > highestValue) {
+			highest = values[i];
+			continue;
+		}
 
-    if (currentValue < highestValue) continue;
+		if (currentValue < highestValue) continue;
 
-    if (!fallbackComparator) continue;
+		if (!fallbackComparator) continue;
 
-    const comparison = fallbackComparator(highest, values[i]);
+		const comparison = fallbackComparator(highest, values[i]);
 
-    if (comparison < 0) highest = values[i];
-  }
+		if (comparison < 0) highest = values[i];
+	}
 
-  return highest;
+	return highest;
 }
