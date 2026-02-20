@@ -14,7 +14,10 @@
 		"check": "biome check .",
 		"ci:check": "biome ci .",
 		"check:apply": "biome check --write .",
-		"check:safe": "biome check --write --no-errors-on-unmatched ."
+		"check:safe": "biome check --write --no-errors-on-unmatched .",
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "pnpm run build"
 	},
 	"keywords": [],
 	"author": "",
