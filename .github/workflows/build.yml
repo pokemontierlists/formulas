@@ -27,7 +27,6 @@ jobs:
       - name: Run Build
         run: pnpm run build
 
-      # Optional: Upload the 'dist' folder as an artifact if you want to inspect it
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
         with:
