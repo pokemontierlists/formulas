@@ -1,8 +1,8 @@
 {
 	"name": "@pokemontierlists/formulas",
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
-  },
+	"publishConfig": {
+		"registry": "https://npm.pkg.github.com"
+	},
 	"version": "0.0.1",
 	"description": "",
 	"main": "src/index.js",
