@@ -1,12 +1,15 @@
 {
-	"name": "formulas",
-	"version": "1.0.0",
+	"name": "@pokemontierlists/formulas",
+	"publishConfig": {
+		"registry": "https://npm.pkg.github.com"
+	},
+	"version": "0.0.1",
 	"description": "",
 	"main": "src/index.js",
 	"type": "module",
 	"scripts": {
-		"test": "vitest",
-		"coverage": "vitest run --coverage",
+		"test:watch": "vitest",
+		"test": "vitest run",
 		"lint": "biome lint .",
 		"lint:fix": "biome lint --write .",
 		"format": "biome format .",
@@ -14,7 +17,10 @@
 		"check": "biome check .",
 		"ci:check": "biome ci .",
 		"check:apply": "biome check --write .",
-		"check:safe": "biome check --write --no-errors-on-unmatched ."
+		"check:safe": "biome check --write --no-errors-on-unmatched .",
+		"build": "tsc",
+		"clean": "rm -rf dist",
+		"prepublishOnly": "pnpm run build"
 	},
 	"keywords": [],
 	"author": "",
