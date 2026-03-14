@@ -1,5 +1,5 @@
-import Big from 'big.js';
+import { LibBig } from "../lib-big.js";
 
-export function sum(values: Big[]): Big {
-  return values.reduce((total, current) => total.plus(current), new Big(0));
+export function sum(values: LibBig[]): LibBig {
+  return values.reduce((total, current) => total.plus(current), new LibBig(0));
 }
