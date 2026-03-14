@@ -9,5 +9,6 @@ export function variance(values: number[]) {
 	const result =
 		values.reduce((sum, value) => sum + (value - average) ** 2, 0) /
 		valuesCount;
+
 	return result;
 }
