@@ -6,8 +6,8 @@ export function max(values: LibBig[]): LibBig {
 	if (values.length === 0) return new LibBig(0);
 
 	return values.reduce(
-    (highest, current) => current.gt(highest) ? current : highest,
-    new LibBig(Number.MIN_SAFE_INTEGER)
+		(highest, current) => (current.gt(highest) ? current : highest),
+		new LibBig(Number.MIN_SAFE_INTEGER),
 	);
 }
 

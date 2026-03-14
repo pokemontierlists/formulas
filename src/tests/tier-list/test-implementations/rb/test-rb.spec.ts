@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { max, maxBy } from '../../../../aggregates/max.js';
+import { LibBig } from '../../../../lib-big.js';
 import { sum } from '../../../../operations/sum.js';
 import {
 	calculateFinalScore,
@@ -10,7 +11,6 @@ import {
 import { mockGlobalModifiers } from './mock-modifiers.js';
 import { mockRoutes } from './mock-routes.js';
 import { mockSubroutes } from './mock-subroutes.js';
-import { LibBig } from '../../../../lib-big.js';
 
 function groupBy<T, K, E>(
 	array: T[],
@@ -117,7 +117,7 @@ describe('Full-scale test implementation of the RB tier list model', () => {
 				new LibBig(healingModifier),
 			);
 
-      console.log({ ...matchup, score });
+			console.log({ ...matchup, score });
 			return { ...matchup, score };
 		});
 
@@ -130,10 +130,13 @@ describe('Full-scale test implementation of the RB tier list model', () => {
 		const routeScores = groups.entries().map(([key, route]) => ({
 			id: key,
 			pokemonId: route[0].pokemonId,
-			score:
-				sum((groups.get(key) || []).map((group) => new LibBig(group.score)))
-          .mul
-				(new LibBig(mockRoutes.find((route) => route.routeId === key)?.tmsModifier || 0)),
+			score: sum(
+				(groups.get(key) || []).map((group) => new LibBig(group.score)),
+			).mul(
+				new LibBig(
+					mockRoutes.find((route) => route.routeId === key)?.tmsModifier || 0,
+				),
+			),
 		}));
 
 		// Step 6: get highest score for each Pokemon
@@ -152,11 +155,14 @@ describe('Full-scale test implementation of the RB tier list model', () => {
 				(g) => g.pokemonId === score.pokemonId,
 			);
 
-      // console.log(score.score);
+			// console.log(score.score);
 
 			const modifiersTotal =
 				// (modifiers?.expGroupModifier || 0) + (modifiers?.hms || 0);
-        sum([new LibBig((modifiers?.expGroupModifier || 0)), new LibBig((modifiers?.hms || 0))])
+				sum([
+					new LibBig(modifiers?.expGroupModifier || 0),
+					new LibBig(modifiers?.hms || 0),
+				]);
 
 			return {
 				...score,
@@ -165,15 +171,23 @@ describe('Full-scale test implementation of the RB tier list model', () => {
 		});
 
 		// Bulbasaur
-		expect(scoresWithModifiers[0].score.toString().startsWith('3.3965543975')).toBe(true);
-    // console.log(scoresWithModifiers[0].score.toString())
+		expect(
+			scoresWithModifiers[0].score.toString().startsWith('3.3965543975'),
+		).toBe(true);
+		// console.log(scoresWithModifiers[0].score.toString())
 		// Charmander
-		expect(scoresWithModifiers[1].score.toString().startsWith('3.1157806524')).toBe(true);
-    // console.log(scoresWithModifiers[1].score.toString())
+		expect(
+			scoresWithModifiers[1].score.toString().startsWith('3.1157806524'),
+		).toBe(true);
+		// console.log(scoresWithModifiers[1].score.toString())
 		// Squirtle
-		expect(scoresWithModifiers[2].score.toString().startsWith('4.0856250935')).toBe(true);
+		expect(
+			scoresWithModifiers[2].score.toString().startsWith('4.0856250935'),
+		).toBe(true);
 
 		// Caterpie
-		expect(scoresWithModifiers[3].score.toString().startsWith('1.0621621160')).toBe(true);
+		expect(
+			scoresWithModifiers[3].score.toString().startsWith('1.0621621160'),
+		).toBe(true);
 	});
 });

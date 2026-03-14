@@ -1,4 +1,4 @@
-import { LibBig } from "../lib-big.js";
+import { LibBig } from '../lib-big.js';
 import { variance } from './variance.js';
 
 /**
@@ -7,11 +7,11 @@ import { variance } from './variance.js';
  * @returns The square root of the variance as a LibBig instance.
  */
 export function stdev(values: LibBig[]): LibBig {
-  const v = variance(values);
-  
-  // Since big.js lacks .sqrt(), we convert to number to use Math.sqrt,
-  // then wrap it back into LibBig.
-  const result = Math.sqrt(Number(v.toString()));
-  
-  return new LibBig(result);
+	const v = variance(values);
+
+	// Since big.js lacks .sqrt(), we convert to number to use Math.sqrt,
+	// then wrap it back into LibBig.
+	const result = Math.sqrt(Number(v.toString()));
+
+	return new LibBig(result);
 }
