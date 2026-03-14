@@ -165,15 +165,15 @@ describe('Full-scale test implementation of the RB tier list model', () => {
 		});
 
 		// Bulbasaur
-		expect(scoresWithModifiers[0].score.toString().startsWith('3.396554')).toBe(true);
+		expect(scoresWithModifiers[0].score.toString().startsWith('3.3965543975')).toBe(true);
     // console.log(scoresWithModifiers[0].score.toString())
 		// Charmander
-		expect(scoresWithModifiers[1].score.toString().startsWith('3.1157806')).toBe(true);
+		expect(scoresWithModifiers[1].score.toString().startsWith('3.1157806524')).toBe(true);
     // console.log(scoresWithModifiers[1].score.toString())
 		// Squirtle
-		expect(scoresWithModifiers[2].score.toString().startsWith('4.08562509')).toBe(true);
+		expect(scoresWithModifiers[2].score.toString().startsWith('4.0856250935')).toBe(true);
 
 		// Caterpie
-		expect(scoresWithModifiers[3].score.toString().startsWith('1.0621621')).toBe(true);
+		expect(scoresWithModifiers[3].score.toString().startsWith('1.0621621160')).toBe(true);
 	});
 });
