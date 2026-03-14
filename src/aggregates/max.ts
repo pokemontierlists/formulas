@@ -1,4 +1,3 @@
-import Big from 'big.js';
 import { errors } from '../constants/errors.js';
 import { LibBig } from '../lib-big.js';
 
