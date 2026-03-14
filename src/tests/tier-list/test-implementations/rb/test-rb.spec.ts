@@ -10,6 +10,7 @@ import {
 import { mockGlobalModifiers } from './mock-modifiers.js';
 import { mockRoutes } from './mock-routes.js';
 import { mockSubroutes } from './mock-subroutes.js';
+import { LibBig } from '../../../../lib-big.js';
 
 function groupBy<T, K, E>(
 	array: T[],
@@ -35,21 +36,21 @@ function groupBy<T, K, E>(
 describe('Full-scale test implementation of the RB tier list model', () => {
 	it('Calculates final scores correctly', () => {
 		const trainerRawWeights = {
-			brock: 0,
-			misty: 0,
-			ltSurge: 0,
-			erika: 0,
-			silphCoRival: 0,
-			koga: 0,
-			sabrina: 0,
-			blaine: 0,
-			giovanni: 0,
-			route22Rival: 0,
-			lorelei: 0,
-			bruno: 0,
-			agatha: 0,
-			lance: 0,
-			champion: 0,
+			brock: new LibBig(0),
+			misty: new LibBig(0),
+			ltSurge: new LibBig(0),
+			erika: new LibBig(0),
+			silphCoRival: new LibBig(0),
+			koga: new LibBig(0),
+			sabrina: new LibBig(0),
+			blaine: new LibBig(0),
+			giovanni: new LibBig(0),
+			route22Rival: new LibBig(0),
+			lorelei: new LibBig(0),
+			bruno: new LibBig(0),
+			agatha: new LibBig(0),
+			lance: new LibBig(0),
+			champion: new LibBig(0),
 		};
 
 		// Step 1: filter out all routes that are excluded
@@ -76,13 +77,13 @@ describe('Full-scale test implementation of the RB tier list model', () => {
 				(matchup) => matchup.trainer === trainer,
 			);
 
-			const bestScores: number[] = [];
+			const bestScores: LibBig[] = [];
 
 			for (const pokemon of distinctPokemonByMatchups) {
 				const scores = matchupsAgainstTrainer.filter(
 					(matchup) => matchup.pokemonId === pokemon,
 				);
-				bestScores.push(max(scores.map((score) => score.score)));
+				bestScores.push(max(scores.map((score) => new LibBig(score.score))));
 			}
 
 			const weight = calculateRawMatchupWeight(bestScores);
@@ -103,7 +104,7 @@ describe('Full-scale test implementation of the RB tier list model', () => {
 		// Step 4: Calculate each score with the weights and healing items modifiers
 		const calculatedMatchups = matchups.map((matchup) => {
 			const healingModifier = matchup.healingItemsCount
-				? 0.9 * matchup.healingItemsCount
+				? new LibBig(0.9).mul(matchup.healingItemsCount)
 				: 1;
 			const trainerWeight =
 				normalizedTrainerWeights[
@@ -111,10 +112,12 @@ describe('Full-scale test implementation of the RB tier list model', () => {
 				];
 
 			const score = calculateMatchupScore(
-				matchup.score,
+				new LibBig(matchup.score),
 				trainerWeight,
-				healingModifier,
+				new LibBig(healingModifier),
 			);
+
+      console.log({ ...matchup, score });
 			return { ...matchup, score };
 		});
 
@@ -128,8 +131,9 @@ describe('Full-scale test implementation of the RB tier list model', () => {
 			id: key,
 			pokemonId: route[0].pokemonId,
 			score:
-				sum(groups.get(key)?.map((group) => group.score) || []) *
-				(mockRoutes.find((route) => route.routeId === key)?.tmsModifier || 0),
+				sum((groups.get(key) || []).map((group) => new LibBig(group.score)))
+          .mul
+				(new LibBig(mockRoutes.find((route) => route.routeId === key)?.tmsModifier || 0)),
 		}));
 
 		// Step 6: get highest score for each Pokemon
@@ -148,8 +152,11 @@ describe('Full-scale test implementation of the RB tier list model', () => {
 				(g) => g.pokemonId === score.pokemonId,
 			);
 
+      // console.log(score.score);
+
 			const modifiersTotal =
-				(modifiers?.expGroupModifier || 0) + (modifiers?.hms || 0);
+				// (modifiers?.expGroupModifier || 0) + (modifiers?.hms || 0);
+        sum([new LibBig((modifiers?.expGroupModifier || 0)), new LibBig((modifiers?.hms || 0))])
 
 			return {
 				...score,
@@ -158,15 +165,15 @@ describe('Full-scale test implementation of the RB tier list model', () => {
 		});
 
 		// Bulbasaur
-		expect(scoresWithModifiers[0].score).toBeCloseTo(3.3965544);
-
+		expect(scoresWithModifiers[0].score.toString().startsWith('3.396554')).toBe(true);
+    // console.log(scoresWithModifiers[0].score.toString())
 		// Charmander
-		expect(scoresWithModifiers[1].score).toBeCloseTo(3.1157807);
-
+		expect(scoresWithModifiers[1].score.toString().startsWith('3.1157806')).toBe(true);
+    // console.log(scoresWithModifiers[1].score.toString())
 		// Squirtle
-		expect(scoresWithModifiers[2].score).toBeCloseTo(4.0856251);
+		expect(scoresWithModifiers[2].score.toString().startsWith('4.08562509')).toBe(true);
 
 		// Caterpie
-		expect(scoresWithModifiers[3].score).toBeCloseTo(1.0621621);
+		expect(scoresWithModifiers[3].score.toString().startsWith('1.0621621')).toBe(true);
 	});
 });
