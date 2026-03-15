@@ -154,11 +154,10 @@ describe('Full-scale test implementation of the RB tier list model', () => {
 				(g) => g.pokemonId === score.pokemonId,
 			);
 
-			const modifiersTotal =
-				sum([
-					new LibBig(modifiers?.expGroupModifier || 0),
-					new LibBig(modifiers?.hms || 0),
-				]);
+			const modifiersTotal = sum([
+				new LibBig(modifiers?.expGroupModifier || 0),
+				new LibBig(modifiers?.hms || 0),
+			]);
 
 			return {
 				...score,
