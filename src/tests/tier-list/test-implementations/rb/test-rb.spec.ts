@@ -117,7 +117,6 @@ describe('Full-scale test implementation of the RB tier list model', () => {
 				new LibBig(healingModifier),
 			);
 
-			console.log({ ...matchup, score });
 			return { ...matchup, score };
 		});
 
@@ -155,10 +154,7 @@ describe('Full-scale test implementation of the RB tier list model', () => {
 				(g) => g.pokemonId === score.pokemonId,
 			);
 
-			// console.log(score.score);
-
 			const modifiersTotal =
-				// (modifiers?.expGroupModifier || 0) + (modifiers?.hms || 0);
 				sum([
 					new LibBig(modifiers?.expGroupModifier || 0),
 					new LibBig(modifiers?.hms || 0),
@@ -174,12 +170,12 @@ describe('Full-scale test implementation of the RB tier list model', () => {
 		expect(
 			scoresWithModifiers[0].score.toString().startsWith('3.3965543975'),
 		).toBe(true);
-		// console.log(scoresWithModifiers[0].score.toString())
+
 		// Charmander
 		expect(
 			scoresWithModifiers[1].score.toString().startsWith('3.1157806524'),
 		).toBe(true);
-		// console.log(scoresWithModifiers[1].score.toString())
+
 		// Squirtle
 		expect(
 			scoresWithModifiers[2].score.toString().startsWith('4.0856250935'),
