@@ -1,20 +1,23 @@
+import Big from 'big.js';
 import { describe, expect, it } from 'vitest';
 import { MaxByNoValuesError, max, maxBy } from '../../aggregates/max.js';
 
 describe('Max functions', () => {
 	describe('max', () => {
 		it('Returns the highest value', () => {
-			expect(max([1, 2, 3])).toBe(3);
-			expect(max([5, 7, 6])).toBe(7);
-			expect(max([10, 9, 8])).toBe(10);
+			expect(max([new Big(1), new Big(2), new Big(3)]).toString()).toBe('3');
+			expect(max([new Big(5), new Big(7), new Big(6)]).toString()).toBe('7');
+			expect(max([new Big(10), new Big(9), new Big(8)]).toString()).toBe('10');
 		});
 
 		it('Returns correct value if only one number is passed', () => {
-			expect(max([1])).toBe(1);
+			expect(max([new Big(1)]).toString()).toBe('1');
 		});
 
 		it('Returns 0 if the array is empty', () => {
-			expect(max([])).toBe(0);
+			const result = max([]);
+			expect(result).toBeInstanceOf(Big);
+			expect(result.toString()).toBe('0');
 		});
 	});
 
@@ -25,7 +28,7 @@ describe('Max functions', () => {
 				const b = { count: 2 };
 				const c = { count: 3 };
 
-				expect(maxBy([a, b, c], (value) => value.count)).toBe(c);
+				expect(maxBy([a, b, c], (value) => new Big(value.count))).toBe(c);
 			});
 
 			it('Returns the first highest criteria if there is a tie', () => {
@@ -34,16 +37,19 @@ describe('Max functions', () => {
 				const c = { count: 3 };
 				const d = { count: 3 };
 
-				expect(maxBy([a, b, c, d], (value) => value.count)).toBe(c);
+				expect(maxBy([a, b, c, d], (value) => new Big(value.count))).toBe(c);
 			});
 
 			it('Returns correct value if there is only one item', () => {
 				const a = { count: 1 };
-				expect(maxBy([a], (value) => value.count)).toBe(a);
+				expect(maxBy([a], (value) => new Big(value.count))).toBe(a);
 			});
 
 			it('Throws correct error if array is empty', () => {
-				expect(() => maxBy([], (value) => value)).toThrow(MaxByNoValuesError);
+				// Selector must return a Big even in the error case to satisfy TS
+				expect(() => maxBy([], (value) => new Big(value as string))).toThrow(
+					MaxByNoValuesError,
+				);
 			});
 		});
 
@@ -56,15 +62,16 @@ describe('Max functions', () => {
 				expect(
 					maxBy(
 						[a, b, c],
-						(value) => value.count,
+						(value) => new Big(value.count),
 						(v1, v2) => v1.other - v2.other,
 					),
 				).toBe(b);
+
 				expect(
 					maxBy(
 						[a, b, c],
-						(value) => value.count,
-						(v1, v2) => v1.other + v2.other,
+						(value) => new Big(value.count),
+						(v1, v2) => v2.other - v1.other,
 					),
 				).toBe(a);
 			});
